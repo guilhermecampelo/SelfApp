@@ -1,0 +1,122 @@
+﻿@model List<ControleEstoque.Web.Models.PratoModel>
+@{
+    Layout = "~/Views/Shared/_Cadastro.cshtml";
+    ViewBag.Title = "Pratos";
+    ViewBag.Lista = Model;
+}
+
+@section Styles {
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Content/SelfApp/Prato.css" rel="stylesheet" />
+    <style>
+        .dialogo > .modal-dialog {
+            width: 700px !important;
+        }
+    </style>
+}
+
+@section TituloGrid {
+    <th><span class="coluna-ordenacao" data-campo="nome">Nome</span></th>
+    <th><span class="coluna-ordenacao" data-campo="preco_venda">Preço</span></th>
+    <th><span class="coluna-ordenacao" data-campo="ativo">Ativo</span></th>
+    <th>Ação</th>
+}
+
+@section CamposCadastro {
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_nome", "Nome", new { @class = "control-label" })
+            @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_descricao", "Descricao", new { @class = "control-label" })
+            @Html.TextArea("txt_descricao", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("txt_preco_venda", "Preço de Venda", new { @class = "control-label" })
+            @Html.TextBox("txt_preco_venda", null, new { @class = "form-control" })
+        </div>
+        <div class="col-md-8">
+            <div class="form-check" style="line-height: 6em; margin-bottom: -2em">
+                @Html.CheckBox("cbx_ativo", new { @class = "form-check-input" })
+                @Html.Label("cbx_ativo", "Ativo", new { @class = "form-check-label" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("txt_imagem", "Imagem", new { @class = "control-label" })
+            @Html.TextBox("txt_imagem", null, new { @class = "form-control", type = "file", accept = "image/jpg,image/jpeg" })
+        </div>
+    </div>
+
+    <div id="modal_imagem" class="invisivel" role="dialog"></div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script>
+        var tituloPagina = '@ViewBag.Title';
+        var url_excluir = '@Url.Action("ExcluirPrato", "Prato")';
+        var url_confirmar = '@Url.Action("SalvarPrato", "Prato")';
+        var url_page_click = '@Url.Action("PratoPagina", "Prato")';
+        var url_tam_pag_change = '@Url.Action("PratoPagina", "Prato")';
+        var url_filtro_change = '@Url.Action("PratoPagina", "Prato")';
+        var url_alterar = '@Url.Action("RecuperarPrato", "Prato")';
+        var linhas = [];
+
+        @{
+            var linha = 0;
+            foreach (var item in Model)
+            {
+                linha++;
+                if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                {
+                    @:linhas.push(@Html.Raw(Json.Encode(item)));
+                                                                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    </script>
+    <script id="template-grid" type="x-tmpl-mustache">
+        <tr data-id="{{ Id }}" data-imagem="{{ Imagem }}" nome-teste="{{ Nome }}">
+            <td>{{ Nome }}</td>
+            <td>{{ PrecoVenda }},00</td>
+            <td>{{ #Ativo }}SIM{{ /Ativo }}{{ ^Ativo }}NÃO{{ /Ativo }}</td>
+            <td>
+                <a class="btn btn-default btn-exibir-imagem" role="button"><i class="glyphicon glyphicon-picture"></i></a>
+                <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+            </td>
+        </tr>
+    </script>
+    <script id="template-imagem" type="x-tmpl-mustache">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/Content/Imgs/{{ Imagem }}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="modal-footer">
+                            <a id="btn_sair_imagem" class="btn btn-default" role="button" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-remove"></i> Sair
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </script>
+    <script src="~/Scripts/SelfApp/Prato.js"></script>
+}

@@ -1,0 +1,136 @@
+﻿@model List<ControleEstoque.Web.Models.PedidoModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Fazer pedido";
+    ViewBag.Lista = Model;
+}
+
+<div>
+    <h2 style="margin: 20px;">Escolha uma opção de tamanho</h2>
+</div>
+
+<div class="row"  style="display: flex; justify-content: space-between;">
+    <div class="col-md-4" id="bandeja01" style="display: flex; flex-direction: column; vertical-align: middle; ">
+        <div>
+            <img src="~/Content/Images/bandeja-3-divs_peq.jpg" style="width: 250px; height: auto; margin-bottom: 8px;" />
+        </div>
+        <div class="form-check">
+            @Html.RadioButton("cbx_tamanho", (int)ControleEstoque.Web.Models.TamanhoBandeja.tam3, new { id = "cbx_tam3", @class = "form-check-input" })
+            @Html.Label("cbx_tam3", "3 divisórias", new { @class = "form-check-label" })
+        </div>
+    </div>
+    <div class="col-md-4" id="bandeja02">
+        <div>
+            <img src="~/Content/Images/bandeja-4-divs_peq.jpg" style="width: 250px; height: auto; margin-bottom: 8px;" />
+        </div>
+        <div class="form-check">
+            @Html.RadioButton("cbx_tamanho", (int)ControleEstoque.Web.Models.TamanhoBandeja.tam4, new { id = "cbx_tam4", @class = "form-check-input" })
+            @Html.Label("cbx_tam4", "4 divisórias", new { @class = "form-check-label" })
+        </div>
+    </div>
+    <div class="col-md-4" id="bandeja03">
+        <div>
+            <img src="~/Content/Images/bandeja-5-divs_peq.jpg" style="width: 250px; height: auto; margin-bottom: 8px;" />
+        </div>
+        <div class="form-check">
+            @Html.RadioButton("cbx_tamanho", (int)ControleEstoque.Web.Models.TamanhoBandeja.tam5, new { id = "cbx_tam5", @class = "form-check-input" })
+            @Html.Label("cbx_tam5", "5 divisórias", new { @class = "form-check-label" })
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2 style="margin: 20px;">Escolha um prato para a respectiva divisória:</h2>
+</div>
+
+<div  class="row" style="display: flex; justify-content: space-around;">
+    <div class="col-md-2">
+        @Html.Label("ddl_prato01", "Divisória 1", new { @class = "control-label" })
+        @Html.DropDownList("ddl_prato01", new SelectList(ViewBag.Pratos, "Id", "Nome"), new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.Label("ddl_prato02", "Divisória 2", new { @class = "control-label" })
+        @Html.DropDownList("ddl_prato02", new SelectList(ViewBag.Pratos, "Id", "Nome"), new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.Label("ddl_prato03", "Divisória 3", new { @class = "control-label" })
+        @Html.DropDownList("ddl_prato03", new SelectList(ViewBag.Pratos, "Id", "Nome"), new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.Label("ddl_prato04", "Divisória 4", new { @class = "control-label" })
+        @Html.DropDownList("ddl_prato04", new SelectList(ViewBag.Pratos, "Id", "Nome"), new { @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.Label("ddl_prato05", "Divisória 5", new { @class = "control-label" })
+        @Html.DropDownList("ddl_prato05", new SelectList(ViewBag.Pratos, "Id", "Nome"), new { @class = "form-control" })
+    </div>
+</div>
+
+
+
+
+
+
+@*@section Scripts{
+        <script src="~/Scripts/bootstrap-select.js"></script>
+        <script src="~/Scripts/jquery.mask.min.js"></script>
+        <script>
+            var tituloPagina = '@ViewBag.Title';
+            var url_excluir = '@Url.Action("ExcluirPedido", "Pedido")';
+            var url_confirmar = '@Url.Action("SalvarPedido", "Pedido")';
+            var url_page_click = '@Url.Action("PedidoPagina", "Pedido")';
+            var url_tam_pag_change = '@Url.Action("PedidoPagina", "Pedido")';
+            var url_filtro_change = '@Url.Action("PedidoPagina", "Pedido")';
+            var url_alterar = '@Url.Action("RecuperarPedido", "Pedido")';
+            var linhas = [];
+
+            @{
+                var linha = 0;
+                foreach (var item in Model)
+                {
+                    linha++;
+                    if (linha <= ViewBag.QuantMaxLinhasPorPagina)
+                    {
+                        @:linhas.push(@Html.Raw(Json.Encode(item)));
+                                                                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        </script>
+        <script id="template-grid" type="x-tmpl-mustache">
+            <tr data-id="{{ Id }}" data-imagem="{{ Imagem }}" nome-teste="{{ Nome }}">
+                <td>{{ Nome }}</td>
+                <td>{{ PrecoVenda }},00</td>
+                <td>{{ #Ativo }}SIM{{ /Ativo }}{{ ^Ativo }}NÃO{{ /Ativo }}</td>
+                <td>
+                    <a class="btn btn-default btn-exibir-imagem" role="button"><i class="glyphicon glyphicon-picture"></i></a>
+                    <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i> Alterar</a>
+                    <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+                </td>
+            </tr>
+        </script>
+        <script id="template-imagem" type="x-tmpl-mustache">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="/Content/Imgs/{{ Imagem }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="modal-footer">
+                                <a id="btn_sair_imagem" class="btn btn-default" role="button" data-dismiss="modal">
+                                    <i class="glyphicon glyphicon-remove"></i> Sair
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </script>
+        <script src="~/Scripts/SelfApp/Pedido.js"></script>
+    }*@
